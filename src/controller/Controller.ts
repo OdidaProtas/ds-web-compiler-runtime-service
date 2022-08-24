@@ -21,6 +21,7 @@ export class Controller {
           response.status(403);
           response.send({
             msg: "an error occurred",
+            err
           });
         }
       });

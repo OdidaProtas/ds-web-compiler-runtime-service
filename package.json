@@ -10,7 +10,6 @@
    },
    "dependencies": {
       "body-parser": "^1.19.1",
-      "cors": "^2.8.5",
       "dotenv": "^16.0.1",
       "express": "^4.17.2",
       "nodemon": "^2.0.19",
@@ -19,7 +18,7 @@
       "typeorm": "0.3.7"
    },
    "scripts": {
-      "start": "ts-node --exec ts-node src/index.ts",
+      "start": "ts-node src/index.ts",
       "typeorm": "typeorm-ts-node-commonjs",
       "dev": "nodemon"
    }
