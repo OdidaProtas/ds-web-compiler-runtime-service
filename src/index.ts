@@ -4,6 +4,8 @@ import { Request, Response } from "express";
 import { AppDataSource } from "./data-source";
 import { Routes } from "./routes";
 
+import "dotenv/config";
+
 AppDataSource.initialize()
   .then(async () => {
     // create express app
@@ -40,6 +42,8 @@ AppDataSource.initialize()
     });
 
     // start express server
-    app.listen(3000);
+    app.listen(process.env.PORT);
+
+    console.log("App listening on port " + process.env.PORT);
   })
   .catch((error) => console.log(error));

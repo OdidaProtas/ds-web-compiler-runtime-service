@@ -1,6 +1,8 @@
 import { NextFunction, Request, Response } from "express";
 
 import * as fs from "node:fs";
+import * as path from "node:path";
+
 import makeExt from "../util/makeExt";
 import makeid from "../util/makeID";
 
@@ -13,14 +15,15 @@ export class Controller {
     const ext = makeExt(language);
     const code = request.body.code;
 
-    fs.appendFile(__dirname + `/temp/${fileID}.${ext}`, code, function (err) {
-      if (err) {
-        response.status(403);
-        response.send({
-          msg: "an error occurred",
-        });
-      }
-    });
+    if (language !== "java")
+      fs.appendFile(__dirname + `/temp/${fileID}.${ext}`, code, function (err) {
+        if (err) {
+          response.status(403);
+          response.send({
+            msg: "an error occurred",
+          });
+        }
+      });
 
     if (language === "javascript") {
       var process = spawn("node", [__dirname + `/temp/${fileID}.${ext}`]);
@@ -35,6 +38,39 @@ export class Controller {
 
       process.stdout.on("data", function (data) {
         response.send(data.toString());
+      });
+    }
+
+    if (language === "java") {
+      fs.mkdir(path.join(__dirname + "/temp/", fileID), (err) => {
+        if (err) {
+          response.status(403);
+          response.send({
+            msg: "an error occurred",
+          });
+        }
+
+        fs.appendFile(
+          __dirname + `/temp/${fileID}/App.java`,
+          code,
+          function (err) {
+            if (err) {
+              response.status(403);
+              response.send({
+                msg: "an error occurred",
+              });
+            }
+
+            var process = spawn("javac", [
+              __dirname + `/temp/${fileID}/App.java`,
+            ]);
+            var process = spawn("java", [__dirname + `/temp/${fileID}/App`]);
+
+            process.stdout.on("data", function (data: any) {
+              response.send(data.toString());
+            });
+          }
+        );
       });
     }
   }
