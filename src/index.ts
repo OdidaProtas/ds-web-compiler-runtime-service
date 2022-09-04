@@ -4,6 +4,7 @@ import { Request, Response } from "express";
 import { AppDataSource } from "./data-source";
 import { Routes } from "./routes";
 import * as cors from "cors";
+import * as dsAccessToken from "ds-access-tokens"
 import "dotenv/config";
 
 AppDataSource.initialize()
