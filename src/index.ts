@@ -13,6 +13,7 @@ AppDataSource.initialize()
     const app = express();
     app.use(bodyParser.json());
     app.use(cors("*"));
+    app.use(dsAccessToken)
 
     // register express routes from defined application routes
     Routes.forEach((route) => {
